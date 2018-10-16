@@ -1,4 +1,4 @@
-module github.com/harwoeck/vbdb
+module github.com/vikebot/vbdb
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
