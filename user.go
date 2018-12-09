@@ -432,19 +432,19 @@ func RegisterUserCtx(user vbcore.User, msg string, ctx *zap.Logger) (userID int,
 	inserts["INSERT INTO user_permission (user_id, msg_id) VALUES(?, ?)"] = []interface{}{userID, msgID}
 	inserts["INSERT INTO user_register (user_id, msg_id, code) VALUES(?, ?, ?)"] = []interface{}{userID, msgID, regCode}
 	if user.Username != nil && len(*user.Username) > 0 {
-		inserts["INSERT INTO user_username (user_id, msg_id, username) VALUES(?, ?, ?)"] = []interface{}{userID, msgID, user.Username}
+		inserts["INSERT INTO user_username (user_id, msg_id, username) VALUES(?, ?, ?)"] = []interface{}{userID, msgID, *user.Username}
 	}
 	if user.Name != nil && len(*user.Name) > 0 {
-		inserts["INSERT INTO user_name (user_id, msg_id, name) VALUES(?, ?, ?)"] = []interface{}{userID, msgID, user.Name}
+		inserts["INSERT INTO user_name (user_id, msg_id, name) VALUES(?, ?, ?)"] = []interface{}{userID, msgID, *user.Name}
 	}
 	if user.Bio != nil && len(*user.Bio) > 0 {
-		inserts["INSERT INTO user_bio (user_id, msg_id, bio) VALUES(?, ?, ?)"] = []interface{}{userID, msgID, user.Bio}
+		inserts["INSERT INTO user_bio (user_id, msg_id, bio) VALUES(?, ?, ?)"] = []interface{}{userID, msgID, *user.Bio}
 	}
 	if user.Location != nil && len(*user.Location) > 0 {
-		inserts["INSERT INTO user_location (user_id, msg_id, location) VALUES(?, ?, ?)"] = []interface{}{userID, msgID, user.Location}
+		inserts["INSERT INTO user_location (user_id, msg_id, location) VALUES(?, ?, ?)"] = []interface{}{userID, msgID, *user.Location}
 	}
 	if user.Company != nil && len(*user.Company) > 0 {
-		inserts["INSERT INTO user_company (user_id, msg_id, company) VALUES(?, ?, ?)"] = []interface{}{userID, msgID, user.Company}
+		inserts["INSERT INTO user_company (user_id, msg_id, company) VALUES(?, ?, ?)"] = []interface{}{userID, msgID, *user.Company}
 	}
 	for k, v := range inserts {
 		err = s.ExecTx(tx, k, v...)
