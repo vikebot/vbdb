@@ -39,7 +39,7 @@ func Init(config *Config, logCtx *zap.Logger) (err error) {
 	defaultCtx = logCtx
 
 	// Open sql connection
-	db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", conf.DbUser, conf.DbPass, conf.DbAddr, conf.DbName))
+	db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&collation=utf8mb4_unicode_ci", conf.DbUser, conf.DbPass, conf.DbAddr, conf.DbName))
 	if err != nil {
 		return err
 	}
