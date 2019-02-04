@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/harwoeck/sqle"
-
 	"github.com/vikebot/vbcore"
+
 	"go.uber.org/zap"
 
 	// Driver import for MariaDB

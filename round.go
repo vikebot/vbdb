@@ -14,17 +14,18 @@ func ActiveRoundsCtx(ctx *zap.Logger) (rounds []vbcore.Round, success bool) {
 	var name, wallpaper string
 	var starttime mysql.NullTime
 	err := s.SelectRange(`
-		SELECT round.id,
-			round.name,
-			round.wallpaper,
-			(SELECT COUNT(id) FROM roundentry WHERE roundentry.round_id = round.id) AS "joined",
-			roundsize.min,
-			roundsize.max,
-			round.starttime,
-			round.roundstatus_id
-		FROM round, roundsize
-		WHERE round.roundstatus_id IN (?, ?, ?)
-		ORDER BY round.id ASC`,
+	SELECT r.id,
+	r.name,
+	r.wallpaper,
+	(SELECT COUNT(id) FROM roundentry re WHERE re.round_id = r.id) AS "joined",
+	rs.min,
+	rs.max,
+	r.starttime,
+	r.roundstatus_id
+	FROM round r
+	JOIN roundsize rs ON r.roundsize_id = rs.id
+	WHERE r.roundstatus_id IN (?, ?, ?)
+	ORDER BY r.id ASC`,
 		[]interface{}{vbcore.RoundStatusOpen, vbcore.RoundStatusClosed, vbcore.RoundStatusRunning},
 		[]interface{}{&id, &name, &wallpaper, &joined, &min, &max, &starttime, &roundstatus},
 		func() {
