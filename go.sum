@@ -18,6 +18,10 @@ github.com/stretchr/testify v1.2.2 h1:bSDNvY7ZPG5RlJ8otE/7V6gMiyenm9RtJ7IUVIAoJ1
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/vikebot/vbcore v1.0.0 h1:6IJ+odSoUCa8a9syZfqEabb8xRR1Nt6mmlSr/Edj8g8=
 github.com/vikebot/vbcore v1.0.0/go.mod h1:mHN/XXsi+4dSRB2nuhKkjjd3I9RPdY6+jeA+gB92gQ4=
+github.com/vikebot/vbcore v1.0.1 h1:K1tBG3j35HAULNPntr/egSt4nR9KmGwc9TMfoH4wQQY=
+github.com/vikebot/vbcore v1.0.1/go.mod h1:mHN/XXsi+4dSRB2nuhKkjjd3I9RPdY6+jeA+gB92gQ4=
+github.com/vikebot/vbcore v1.0.2-0.20190204174756-c23f5aed9c53 h1:fB80myme/K58nHLN/q+A8+VVZeLJYZticX31BALVNr8=
+github.com/vikebot/vbcore v1.0.2-0.20190204174756-c23f5aed9c53/go.mod h1:mHN/XXsi+4dSRB2nuhKkjjd3I9RPdY6+jeA+gB92gQ4=
 go.uber.org/atomic v1.3.2 h1:2Oa65PReHzfn29GpvgsYwloV9AVFHPDk8tYxt2c2tr4=
 go.uber.org/atomic v1.3.2/go.mod h1:gD2HeocX3+yG+ygLZcrzQJaqmWj9AIm7n08wl/qW/PE=
 go.uber.org/multierr v1.1.0 h1:HoEmRHQPVSqub6w2z2d2EOVs2fjyFRGyofhKuyDq0QI=

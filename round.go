@@ -1,6 +1,8 @@
 package vbdb
 
 import (
+	"strconv"
+
 	"github.com/go-sql-driver/mysql"
 	"github.com/vikebot/vbcore"
 	"go.uber.org/zap"
@@ -53,6 +55,43 @@ func ActiveRoundsCtx(ctx *zap.Logger) (rounds []vbcore.Round, success bool) {
 // logger.
 func ActiveRounds() (lobbies []vbcore.Round, success bool) {
 	return ActiveRoundsCtx(defaultCtx)
+}
+
+// RoundPlayersCtx loads all Players for a given round
+func RoundPlayersCtx(roundID int, ctx *zap.Logger) (players []vbcore.Player, success bool) {
+	// TODO: Change int to string if db uses string IDs instead of int
+	var userID int
+	var username string
+
+	err := s.SelectRange(`
+	SELECT re.user_id, username FROM roundentry re
+	JOIN user u on re.user_id = u.id
+	JOIN user_username uu on u.id = uu.user_id
+	WhERE round_id=?
+	`,
+		[]interface{}{roundID},
+		[]interface{}{&userID, &username},
+		func() {
+			players = append(players, vbcore.Player{
+				UserID:   strconv.Itoa(userID),
+				Username: username,
+			})
+		})
+
+	if err != nil {
+		ctx.Error("vbdb.RoundPlayersCtx",
+			zap.Int("roundID", roundID),
+			zap.Error(err))
+		return nil, false
+	}
+
+	return players, true
+}
+
+// RoundPlayers is the same as `RoundPlayersCtx` but uses the `defaultCtx` as
+// logger.
+func RoundPlayers(roundID int) (players []vbcore.Player, success bool) {
+	return RoundPlayersCtx(roundID, defaultCtx)
 }
 
 // JoinedUsersCtx returns the `userID`s of all users which joined the round
