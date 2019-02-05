@@ -2,6 +2,7 @@ package vbdb
 
 import (
 	"database/sql"
+	"strconv"
 	"strings"
 	"time"
 
@@ -356,6 +357,46 @@ func UserFromIDCtx(userID int, ctx *zap.Logger) (user *vbcore.SafeUser, success 
 // logger.
 func UserFromID(userID int) (user *vbcore.SafeUser, success bool) {
 	return UserFromIDCtx(userID, defaultCtx)
+}
+
+// UserFromWatchtokenCtx returns a vbcore.PlayerInfo to display in the frontend
+func UserFromWatchtokenCtx(watchtoken string, ctx *zap.Logger) (user *vbcore.PlayerInfo, success bool) {
+	// TODO: Change to string if uuid as string is used in the future
+	var userID, permission int
+	var name, username sql.NullString
+
+	exists, err := s.SelectExists(
+		`SELECT re.user_id, name, username, permission FROM roundentry re
+		JOIN user u on re.user_id = u.id
+		JOIN user_username uu on u.id = uu.user_id
+		JOIN user_name un on u.id = un.user_id
+		JOIN user_permission up on u.id = up.user_id
+		WHERE re.watchtoken=?;`,
+		[]interface{}{watchtoken},
+		[]interface{}{&userID, &name, &username, &permission})
+	if err != nil {
+		ctx.Error("vbdb.UserFromWatchtoken",
+			zap.String("watchtoken", watchtoken),
+			zap.Error(err))
+		return nil, false
+	}
+	if !exists {
+		return nil, true
+	}
+
+	return &vbcore.PlayerInfo{
+		UserID:     strconv.Itoa(userID),
+		Name:       vbcore.TernaryOperatorA(name.Valid, name.String, ""),
+		Permission: vbcore.PermissionItoA(permission),
+		Picture:    "",
+		Username:   vbcore.TernaryOperatorA(username.Valid, username.String, ""),
+	}, true
+}
+
+// UserFromWatchtoken is the same as `UserFromWatchtokenCtx` but uses the
+// `defaultCtx` as logger.
+func UserFromWatchtoken(watchtoken string) (user *vbcore.PlayerInfo, success bool) {
+	return UserFromWatchtokenCtx(watchtoken, defaultCtx)
 }
 
 // UsernameFromID returns a username as string from an given ID

@@ -9,7 +9,7 @@ require (
 	github.com/pkg/errors v0.8.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/testify v1.2.2 // indirect
-	github.com/vikebot/vbcore v1.0.2-0.20190204174756-c23f5aed9c53
+	github.com/vikebot/vbcore v1.0.2-0.20190205090921-ebe9b3a942d5
 	go.uber.org/atomic v1.3.2 // indirect
 	go.uber.org/multierr v1.1.0 // indirect
 	go.uber.org/zap v1.9.1
