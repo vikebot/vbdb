@@ -94,6 +94,43 @@ func RoundPlayers(roundID int) (players []vbcore.Player, success bool) {
 	return RoundPlayersCtx(roundID, defaultCtx)
 }
 
+// RoundPlayersWatchtokenCtx loads all Players for a given round
+func RoundPlayersWatchtokenCtx(watchtoken string, ctx *zap.Logger) (players []vbcore.Player, success bool) {
+	// TODO: Change int to string if db uses string IDs instead of int
+	var userID int
+	var username string
+
+	err := s.SelectRange(`
+	SELECT re.user_id, username FROM roundentry re
+	JOIN user u on re.user_id = u.id
+	JOIN user_username uu on u.id = uu.user_id
+  	WHERE re.round_id IN (SELECT round_id FROM roundentry WHERE watchtoken=?);
+	`,
+		[]interface{}{watchtoken},
+		[]interface{}{&userID, &username},
+		func() {
+			players = append(players, vbcore.Player{
+				UserID:   strconv.Itoa(userID),
+				Username: username,
+			})
+		})
+
+	if err != nil {
+		ctx.Error("vbdb.RoundPlayersWatchtokenCtx",
+			zap.String("watchtoken", watchtoken),
+			zap.Error(err))
+		return nil, false
+	}
+
+	return players, true
+}
+
+// RoundPlayersWatchtoken is the same as `RoundPlayersWatchtokenCtx` but uses the `defaultCtx` as
+// logger.
+func RoundPlayersWatchtoken(watchtoken string) (players []vbcore.Player, success bool) {
+	return RoundPlayersWatchtokenCtx(watchtoken, defaultCtx)
+}
+
 // JoinedUsersCtx returns the `userID`s of all users which joined the round
 // specified through the roundID.
 func JoinedUsersCtx(roundID int, ctx *zap.Logger) (joined []int, success bool) {
